@@ -19,8 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             //Route::middleware('api')
             //    ->prefix('api')
             //    ->group(base_path('routes/api/owner.php'));
-
-            Route::middleware(['web'])
+            Route::middleware(['web', 'auth:web'])
                 ->prefix('admin')
                 ->name('admin.')
                 ->group(base_path('routes/web.php'));
@@ -31,7 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectTo(
-            guests: '/admin/login',
+            guests: '/admin/auth/login',
             users:  '/dashboard'
         );
     })
