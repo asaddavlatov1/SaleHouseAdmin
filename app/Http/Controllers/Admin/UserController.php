@@ -18,7 +18,6 @@ class UserController extends Controller
         return view('admin.users.create');
     }
 
-    // Store a new user
     public function store(UserRequest $request)
     {
         User::create([
@@ -48,7 +47,6 @@ class UserController extends Controller
             'password' => $request->password ? bcrypt($request->password) : $user->password,
             'is_active' => $request->has('is_active'),
         ]);
-
         return redirect()->route('admin.user.index')->with('success', 'User updated successfully.');
     }
 
