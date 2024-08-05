@@ -125,4 +125,5 @@ return [
     'order_item'               => "Buyurtma mahsuloti",
     'document'                 => "Dokument",
     'flat'                     => 'Qavat',
+    'company'                  => 'kompaniya',
 ];
