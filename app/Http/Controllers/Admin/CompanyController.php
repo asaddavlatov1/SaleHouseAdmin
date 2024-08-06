@@ -8,29 +8,29 @@ use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
-    
+    public function __construct(
+        protected CompanyServiceInterface $service,
+        protected UserServiceInterface $userService
+    ){}
+
     public function index()
     {
-        $companies = Company::all();
-        return view('admin.company.index', compact('companies'));
+        $company = $this->service->index();
+        return view('admin.company.index', compact('company'));
     }
 
     public function create()
     {
-        return view('admin.company.create');
+        $users = $this->userService->index();
+        return view('admin.company.create', compact('users'));
     }
 
     public function store(CompanyRequest $request)
     {
-        Company::create($request->validated());
-
-        return redirect()->route('admin.company.index')->with('success', 'Company created successfully.');
+        $this->service->create($company, $request->validated());
+        return redirect()->route('admin.company.index')->with('success', '__(messages.created)');
     }
-
-    public function show(Company $company)
-    {
-        return view('admin.company.show', compact('company'));
-    }
+    
 
     public function edit(Company $company)
     {
@@ -39,14 +39,13 @@ class CompanyController extends Controller
 
     public function update(CompanyRequest $request, Company $company)
     {
-        $company->update($request->validated());
-        return redirect()->route('admin.company.index')->with('success', 'Company updated successfully.');
+        $this->service->update();
+        return redirect()->route('admin.company.index')->with('success', '__(messages.updated)');
     }
 
     public function destroy(Company $company)
     {
-        $company->delete();
-
-        return redirect()->route('admin.company.index')->with('success', 'Company deleted successfully.');
+        $this->service->delete($company);
+        return to_back()->with('success', __('messages.success'));
     }
 }

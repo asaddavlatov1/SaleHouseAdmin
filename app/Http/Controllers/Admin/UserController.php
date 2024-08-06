@@ -7,52 +7,43 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+    public function __construct(
+        protected UserServiceInterface $service
+    ){}
+
     public function index()
     {
-        $data['users'] = User::all();
-        return view('admin.users.index', $data);
+        $users = $this->service->index();
+        return view('admin.users.index', compact('users'));
     }
 
     public function create()
     {
-        return view('admin.users.create');
+        $users = $this->service->create;
+        return view('admin.users.create', compact('users'));
     }
 
     public function store(UserRequest $request)
     {
-        User::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'middle_name' => $request->middle_name,
-            'phone' => $request->phone,
-            'password' => bcrypt($request->password),
-            'is_active' => $request->has('is_active'),
-        ]);
-
-        return redirect()->route('admin.user.index')->with('success', 'User created successfully.');
+        $this->service->store($user, $request->validated());
+        return redirect()->route('admin.user.index')->with('success', '__(messages.created)');
     }
 
     public function edit(User $user)
     {
+        $user = $this->service->edit();
         return view('admin.users.edit', compact('user'));
     }
 
     public function update(UserRequest $request, User $user)
     {
-        $user->update([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'middle_name' => $request->middle_name,
-            'phone' => $request->phone,
-            'password' => $request->password ? bcrypt($request->password) : $user->password,
-            'is_active' => $request->has('is_active'),
-        ]);
-        return redirect()->route('admin.user.index')->with('success', 'User updated successfully.');
+        $this->service->update($user, $request->validated());
+        return redirect()->route('admin.user.index')->with('success', '__(messages.updated)');
     }
 
     public function destroy(User $user)
     {
-        $user->delete();
-        return redirect()->route('admin.user.index')->with('success', 'User deleted successfully.');
+        $this->service->delete($user);
+        return to_back()->with('success', __('messages.success'));
     }
 }
