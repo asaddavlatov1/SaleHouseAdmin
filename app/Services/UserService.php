@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Services;
+namespace App\Services;
 
 use App\Models\User;
 use App\Http\Requests\UserRequest;
@@ -9,12 +9,12 @@ class UserService implements UserServiceInterface
 {
     public function index()
     {
-        return User::query()->get();
+        return User::all();
     }
 
     public function store(UserRequest $request) 
     {
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'surname' => $request->surname,
             'middle_name' => $request->middle_name,
@@ -28,7 +28,8 @@ class UserService implements UserServiceInterface
 
     public function create()
     {
-        return User::all(); 
+        // Foydalanuvchilarni yaratish uchun qo'shimcha ma'lumot kerak emas
+        return [];
     }
 
     public function update(UserRequest $request, User $user) 
@@ -41,13 +42,13 @@ class UserService implements UserServiceInterface
             'password' => $request->password ? bcrypt($request->password) : $user->password,
             'is_active' => $request->has('is_active'),
         ]);
+        
         return $user;
-
     }
 
     public function edit(User $user)
     {
-        return User::find($user);
+        return $user;
     }
 
     public function delete(User $user): void

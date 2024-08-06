@@ -4,6 +4,7 @@ namespace app\Services;
 
 use App\Models\Company;
 use App\Http\Requests\CompanyRequest;
+use App\Services\Interface\CompanyServiceInterface;
 
 class CompanyService implements CompanyServiceInterface
 {
