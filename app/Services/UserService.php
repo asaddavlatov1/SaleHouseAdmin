@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Http\Requests\UserRequest;
+use App\Services\Interfaces\UserServiceInterface;
+use Illuminate\Support\Facades\Hash;
 
 class UserService implements UserServiceInterface
 {
@@ -12,34 +14,36 @@ class UserService implements UserServiceInterface
         return User::all();
     }
 
-    public function store(UserRequest $request) 
+    public function store(UserRequest $request): User
     {
+
         $user = User::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'middle_name' => $request->middle_name,
-            'phone' => $request->phone,
-            'password' => bcrypt($request->password),
+            'name' => $request->input('name'),
+            'surname' => $request->input('surname'),
+            'middle_name' => $request->input('middle_name'),
+            'phone' => $request->input('phone'),
+            'password' => Hash::make($request->input('password')), // Hashing password securely
             'is_active' => $request->has('is_active'),
         ]);
 
         return $user;
     }
 
-    public function create()
+    public function create(User $user)
     {
-        // Foydalanuvchilarni yaratish uchun qo'shimcha ma'lumot kerak emas
-        return [];
+        return $user;
     }
 
     public function update(UserRequest $request, User $user) 
     {
+        $users = User::find($user);
+
         $user->update([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'middle_name' => $request->middle_name,
-            'phone' => $request->phone,
-            'password' => $request->password ? bcrypt($request->password) : $user->password,
+            'name' => $request->input('name'),
+            'surname' => $request->input('surname'),
+            'middle_name' => $request->input('middle_name'),
+            'phone' => $request->input('phone'),
+            'password' => $request->filled('password') ? Hash::make($request->input('password')) : $user->password,
             'is_active' => $request->has('is_active'),
         ]);
         
@@ -48,11 +52,10 @@ class UserService implements UserServiceInterface
 
     public function edit(User $user)
     {
-        return $user;
-    }
+        $company = Company::findOrFail($user);    }
 
     public function delete(User $user): void
     {
         $user->delete();
-    }
+    }   
 }

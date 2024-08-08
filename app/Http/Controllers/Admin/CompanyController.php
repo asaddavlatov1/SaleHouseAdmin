@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Http\Requests\CompanyRequest;
-use App\Services\Interface\CompanyServiceInterface;
-use App\Services\Interface\UserServiceInterface;
+use App\Services\Interfaces\CompanyServiceInterface;
+use App\Services\Interfaces\UserServiceInterface;
 
 class CompanyController extends Controller
 {
@@ -23,8 +23,8 @@ class CompanyController extends Controller
 
     public function create()
     {
-        $users = $this->userService->index(); 
-        return view('admin.company.create', compact('users'));
+        $company = $this->userService->index(); 
+        return view('admin.company.create', compact('company'));
     }
 
     public function store(CompanyRequest $request)
@@ -35,8 +35,8 @@ class CompanyController extends Controller
 
     public function edit(Company $company)
     {
-        $users = $this->userService->index(); 
-        return view('admin.company.edit', compact('company', 'users'));
+        $company = $this->userService->index(); 
+        return view('admin.company.edit', compact('company'));
     }
 
     public function update(CompanyRequest $request, Company $company)

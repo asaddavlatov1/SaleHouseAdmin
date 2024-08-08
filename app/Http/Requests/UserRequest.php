@@ -23,10 +23,11 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'surname' => 'nullable|string|max:255',
+            'surname' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|string|max:14',
             'password' => 'required|string|min:8|confirmed',
+            'is_active' => 'sometimes|boolean',
         ];
     }
 
@@ -38,8 +39,12 @@ class UserRequest extends FormRequest
     public function messages()
     {
         return [
+            'name.required' => 'The name field is required.',
+            'surname.required' => 'The surname field is required.',
             'phone.required' => 'The phone number field is required.',
             'password.required' => 'The password field is required.',
+            'password.confirmed' => 'The password confirmation does not match.',
+            'is_active.boolean' => 'The is_active field must be true or false.',
         ];
     }
 }

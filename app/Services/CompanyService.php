@@ -1,36 +1,35 @@
 <?php
 
-namespace app\Services;
+namespace App\Services;
 
 use App\Models\Company;
 use App\Http\Requests\CompanyRequest;
-use App\Services\Interface\CompanyServiceInterface;
+use App\Services\Interfaces\CompanyServiceInterface;
 
 class CompanyService implements CompanyServiceInterface
 {
     public function index()
     {
-        return Company::query()->get();
+        return Company::all();
     }
 
-    public function create(CompanyRequest $request) 
+    public function store(CompanyRequest $request)
     {
         return Company::create($request->validated());
     }
 
-    public function edit(company $company )
+    public function show(Company $company)
     {
-        return User::find($company);
+        return $company;
     }
 
-    public function update(CompanyRequest $request, Company $company) 
+    public function update(CompanyRequest $request, Company $company)
     {
-        return Company::update($request->validated());
-
+        return $company->update($request->validated());
     }
 
     public function delete(Company $company): void
     {
-         $company->delete();
+        $company->delete();
     }
 }
